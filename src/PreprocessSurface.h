@@ -8,6 +8,8 @@
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <cstddef>
 #include <iterator>
+#include <string>
+#include <utility>
 #include <vector>
 
 class PreprocessSurface {
@@ -17,8 +19,12 @@ public:
   using TPoint3 = TKernel::Point_3;
   using TMesh = CGAL::Surface_mesh<TPoint3>;
 
+  struct VertexData {
+    std::size_t idx;
+    TReal z;
+  };
   using TVertices =
-      CGAL::Triangulation_vertex_base_with_info_2<std::size_t, TKernel>;
+      CGAL::Triangulation_vertex_base_with_info_2<VertexData, TKernel>;
   using TTriangulationDS = CGAL::Triangulation_data_structure_2<TVertices>;
   using TDelaunay = CGAL::Delaunay_triangulation_2<TKernel, TTriangulationDS>;
   using TPoint2 = TKernel::Point_2;
@@ -37,6 +43,7 @@ public:
   void buildDelaunay();
   bool inicialize(const std::string &mesh_filename,
                   const std::string &dents_filename);
+  bool saveOBJ(const std::string &filename);
   TMesh &getMesh() { return mesh; }
   TDelaunay &getDelaunay() { return T; }
   std::vector<Dent> &getDents() { return dents; }
@@ -47,7 +54,7 @@ public:
     return mesh.point(typename TMesh::Vertex_index(idx));
   }
   std::size_t getMeshIndex(typename TDelaunay::Vertex_handle vh) {
-    return vh->info();
+    return vh->info().idx;
   }
 
 private:

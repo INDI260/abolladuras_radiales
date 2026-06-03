@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  pujCGAL::IO::save(T, argv[3]);
+  preprocess.saveOBJ(argv[3]);
   return (EXIT_SUCCESS);
 }
 

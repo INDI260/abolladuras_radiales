@@ -66,12 +66,36 @@ void PreprocessSurface::collectDentPoints() {
 }
 
 void PreprocessSurface::buildDelaunay() {
-  // Build Delaunay from (x,y), storing z as vertex height
+  // Build Delaunay from (x,y), storing mesh index and z height
   for (auto v : mesh.vertices()) {
     auto p = mesh.point(v);
     auto vh = T.insert(TPoint2(p[0], p[1]));
-    vh->info() = v.idx(); // the height is retrieved from the mesh
+    vh->info() = {v.idx(), p[2]};
   }
+}
+
+bool PreprocessSurface::saveOBJ(const std::string &filename) {
+  std::stringstream out;
+  std::size_t i = 0;
+
+  for (auto v = T.finite_vertices_begin(); v != T.finite_vertices_end(); ++v) {
+    auto z = v->info().z;
+    v->info().idx = ++i;
+    out << "v " << v->point().x() << " " << v->point().y() << " " << z
+        << std::endl;
+  }
+
+  for (auto f = T.finite_faces_begin(); f != T.finite_faces_end(); ++f) {
+    out << "f "
+        << f->vertex(0)->info().idx << " "
+        << f->vertex(1)->info().idx << " "
+        << f->vertex(2)->info().idx << std::endl;
+  }
+
+  std::ofstream fout(filename);
+  if (!fout) return false;
+  fout << out.str();
+  return true;
 }
 
 bool PreprocessSurface::inicialize(const std::string &mesh_filename,

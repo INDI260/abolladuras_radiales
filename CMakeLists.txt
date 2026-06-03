@@ -16,7 +16,7 @@ include_directories(
 find_package(CGAL REQUIRED COMPONENTS Core)
 
 # -- Executables
-add_executable(bash_surface src/bash_surface.cxx src/PreprocessSurface.cxx)
+add_executable(bash_surface src/bash_surface.cxx src/PreprocessSurface.cxx src/DentApplier.cxx)
 target_link_libraries(bash_surface CGAL::CGAL)
 
 ## eof - CMakeLists.txt

@@ -79,7 +79,7 @@ bool PreprocessSurface::saveOBJ(const std::string &filename) {
   std::size_t i = 0;
 
   for (auto v = T.finite_vertices_begin(); v != T.finite_vertices_end(); ++v) {
-    auto z = v->info().z;
+    auto z = mesh.point(typename TMesh::Vertex_index(v->info().idx)).z();
     v->info().idx = ++i;
     out << "v " << v->point().x() << " " << v->point().y() << " " << z
         << std::endl;

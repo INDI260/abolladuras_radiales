@@ -97,3 +97,11 @@ python3 test/visualize.py puntos.obj dents.txt
 # Genera: vis_<timestamp>.png
 ```
 
+## Resultados visuales
+
+| RBF | Animacion |
+|-----|-----------|
+| Gaussiana | ![gaussian](docs/gaussian.gif) |
+| Multicuadrica | ![multiquadric](docs/multiquadric.gif) |
+| Multicuadrica inversa | ![inverse_multiquadric](docs/inverse_multiquadric.gif) |
+

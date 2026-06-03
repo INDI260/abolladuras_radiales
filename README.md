@@ -15,42 +15,52 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
-## Script: `test/generate_surface.sh`
+## Script: `test/generate_surface.py`
 
 Genera un par de archivos (`.obj` + `_dents.txt`) con un timestamp como ID comun.
+
+Dependencias: `numpy`.
 
 ### Uso
 
 ```bash
-./test/generate_surface.sh <filas> <columnas> <abolladuras> [rangos...]
+python3 test/generate_surface.py <filas> <columnas> <abolladuras> [opciones]
 ```
 
-### Parametros
+### Opciones generales
 
-| Posicion | Parametro | Default |
-|----------|-----------|---------|
-| 1 | filas | — |
-| 2 | columnas | — |
-| 3 | abolladuras | — |
-| 4-5 | x_min x_max | 0 100 |
-| 6-7 | y_min y_max | 0 100 |
-| 8-9 | z_min z_max | -5 5 |
-| 10-11 | r_min r_max | 3 20 |
-| 12-13 | i_min i_max | 0.1 1.0 |
+| Flag | Default | Descripcion |
+|------|---------|-------------|
+| `--x-range XMIN XMAX` | 0 100 | Rango en X |
+| `--y-range YMIN YMAX` | 0 200 | Rango en Y |
+| `--r-range RMIN RMAX` | 10 50 | Rango de radio |
+| `--i-range IMIN IMAX` | 0 20 | Rango de profundidad maxima |
+| `--out PREFIJO` | timestamp | Prefijo para los archivos de salida |
 
-Los puntos se generan como un grid estructurado de `filas x columnas`
-con coordenadas `(x,y)` espaciadas uniformemente y altura `z` aleatoria
-dentro del rango especificado. Las abolladuras se distribuyen aleatoriamente
-en el mismo plano.
+### Modos de altura (mutuamente excluyentes)
+
+| Flag | Descripcion |
+|------|-------------|
+| `--flat` | `z = 0` (superficie plana) |
+| `--random ZMIN ZMAX` | `z` aleatorio en `[ZMIN, ZMAX]` (default) |
+| `--perlin SCALE OCTAVES` | Ruido Perlin 2D. `SCALE` controla el ancho de las ondas (mas grande = terreno mas suave), `OCTAVES` controla el detalle (mas octavas = mas variacion fina). Altura normalizada en `[-20, 20]`. |
+
+Si no se especifica ningun modo, se usa `--random -5 5`.
 
 ### Ejemplos
 
 ```bash
-# Grid 50x30 plano con 3 abolladuras, valores por defecto
-./test/generate_surface.sh 50 30 3
+# Grid 50x30 plano
+python3 test/generate_surface.py 50 30 3 --flat
 
-# Grid 100x100 con alturas pequenas y abolladuras chicas
-./test/generate_surface.sh 100 100 5 0 10 0 10 -2 2 0.5 3 0 1
+# Terreno con Perlin noise (scale grande → ondas suaves)
+python3 test/generate_surface.py 100 80 5 --perlin 30 4
+
+# Perlin con detalle fino (scale pequeno → mas variacion)
+python3 test/generate_surface.py 100 80 5 --perlin 10 6
+
+# Alturas aleatorias (default)
+python3 test/generate_surface.py 50 30 3
 ```
 
 ## Binario: `bash_surface`
@@ -63,15 +73,19 @@ Aplica las abolladuras sobre un `.obj` usando funciones de base radial (RBF).
 ./build/bash_surface entrada.obj dents.txt rbf_type salida.obj [before.obj]
 ```
 
-`rbf_type`: `gaussian`, `multiquadric` o `inverse_multiquadric`.
+`rbf_type`: `gaussian`, `multiquadric`, `inverse_multiquadric` o `wendland`.
+
+Wendland φ₃,₁ tiene soporte compacto: vale 1 en el centro, 0 en el borde con transicion suave C², ideal para evitar cortes abruptos.
+
+La intensidad `I` en `dents.txt` es la profundidad real en las mismas unidades que las alturas del mesh (profundidad maxima en el centro).
 
 Si se pasa `before.obj`, guarda la triangulacion antes de aplicar las abolladuras.
 
 ### Ejemplos
 
 ```bash
-./build/bash_surface entrada.obj dents.txt gaussian salida.obj
-./build/bash_surface entrada.obj dents.txt gaussian salida.obj antes.obj
+./build/bash_surface entrada.obj dents.txt wendland salida.obj
+./build/bash_surface entrada.obj dents.txt wendland salida.obj antes.obj
 ```
 
 ## Visualizacion: `test/visualize.py`

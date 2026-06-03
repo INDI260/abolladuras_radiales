@@ -17,6 +17,7 @@ private:
   static TReal rbfGaussian(TReal r2, TReal eps2);
   static TReal rbfMultiquadric(TReal r, TReal eps);
   static TReal rbfInverseMultiquadric(TReal r, TReal eps);
+  static TReal rbfWendland(TReal t);
 };
 
 #endif // __DentApplier__h__

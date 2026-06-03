@@ -13,6 +13,13 @@ TReal DentApplier::rbfInverseMultiquadric(TReal r, TReal eps) {
   return 1 / std::sqrt(1 + std::pow(eps * r, 2));
 }
 
+TReal DentApplier::rbfWendland(TReal t) {
+  if (t >= 1)
+    return 0;
+  TReal u = 1 - t;
+  return u * u * u * u * (4 * t + 1);
+}
+
 bool DentApplier::applyDents(const std::string &rbf_type, TReal epsilon) {
   auto &mesh = preprocess.getMesh();
   auto &dents = preprocess.getDents();
@@ -35,6 +42,8 @@ bool DentApplier::applyDents(const std::string &rbf_type, TReal epsilon) {
         w = rbfMultiquadric(std::sqrt(t2), epsilon);
       else if (rbf_type == "inverse_multiquadric")
         w = rbfInverseMultiquadric(std::sqrt(t2), epsilon);
+      else if (rbf_type == "wendland")
+        w = rbfWendland(std::sqrt(t2));
       else
         return false;
 

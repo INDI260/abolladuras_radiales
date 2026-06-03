@@ -306,35 +306,37 @@ python3 test/generate_surface.py 100 80 5 \
 ./build/bash_surface caso_base.obj caso_base_dents.txt wendland            out_w.obj
 \end{verbatim}
 
-\section{Errores}
+\section{Carencias}
 
 \begin{enumerate}
     \item La intensidad o el parámetro escalar de las funciones de base radial
     quedó siendo usado como un valor sin delimitar.
-    \item La visualización de las abolladuras depende en gran medida del valor
-    de intensidad; entre 10 y 35 se obtienen buenos resultados para una
-    superficie con variación en la altura.
+    \item Las RBF de soporte global (gaussiana, multicuádrica e inversa)
+    presentan una transición abrupta en el borde del círculo cuando la
+    intensidad es alta (entre 10 y 50). La depresión generada no es suave
+    en el perímetro debido a que el peso residual \(e^{-\varepsilon^2}\)
+    es distinto de cero en \(r = R\).
 \end{enumerate}
 
 \section{Resultados}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{caso_base_triangulacion.png}
+    \includegraphics[width=0.7\textwidth]{docs/caso_base_triangulacion.png}
     \caption{Malla base sin deformar.}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.45\textwidth]{gaussiana.png}
-    \includegraphics[width=0.45\textwidth]{multicuadrática.png}
+    \includegraphics[width=0.45\textwidth]{docs/gaussiana.png}
+    \includegraphics[width=0.45\textwidth]{docs/multicuadrática.png}
     \caption{Resultados con función gaussiana (izquierda) y multicuádrica (derecha).}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.45\textwidth]{multicuadrática_inversa.png}
-    \includegraphics[width=0.45\textwidth]{wendland.png}
+    \includegraphics[width=0.45\textwidth]{docs/multicuadrática_inversa.png}
+    \includegraphics[width=0.45\textwidth]{docs/wendland.png}
     \caption{Resultados con función multicuádrica inversa (izquierda) y Wendland \(\phi_{3,1}\) (derecha).}
 \end{figure}
 

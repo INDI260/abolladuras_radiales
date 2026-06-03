@@ -15,7 +15,7 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
-## Script: `test/generate_surface.py`
+## Script: `scripts/generate_surface.py`
 
 Genera un par de archivos (`.obj` + `_dents.txt`) con un timestamp como ID comun.
 
@@ -24,14 +24,14 @@ Dependencias: `numpy`.
 ### Uso
 
 ```bash
-python3 test/generate_surface.py <filas> <columnas> <abolladuras> [opciones]
+python3 scripts/generate_surface.py <filas> <columnas> <abolladuras> [opciones]
 ```
 
 ### Opciones generales
 
 | Flag | Default | Descripcion |
 |------|---------|-------------|
-| `--x-range XMIN XMAX` | 0 100 | Rango en X |
+| `--x-range XMIN XMAX` | 0 200 | Rango en X |
 | `--y-range YMIN YMAX` | 0 200 | Rango en Y |
 | `--r-range RMIN RMAX` | 10 50 | Rango de radio |
 | `--i-range IMIN IMAX` | 0 20 | Rango de profundidad maxima |
@@ -51,16 +51,16 @@ Si no se especifica ningun modo, se usa `--random -5 5`.
 
 ```bash
 # Grid 50x30 plano
-python3 test/generate_surface.py 50 30 3 --flat
+python3 scripts/generate_surface.py 50 30 3 --flat
 
 # Terreno con Perlin noise (scale grande → ondas suaves)
-python3 test/generate_surface.py 100 80 5 --perlin 30 4
+python3 scripts/generate_surface.py 100 80 5 --perlin 30 4
 
 # Perlin con detalle fino (scale pequeno → mas variacion)
-python3 test/generate_surface.py 100 80 5 --perlin 10 6
+python3 scripts/generate_surface.py 100 80 5 --perlin 10 6
 
 # Alturas aleatorias (default)
-python3 test/generate_surface.py 50 30 3
+python3 scripts/generate_surface.py 50 30 3
 ```
 
 ## Binario: `bash_surface`
@@ -88,12 +88,31 @@ Si se pasa `before.obj`, guarda la triangulacion antes de aplicar las abolladura
 ./build/bash_surface entrada.obj dents.txt wendland salida.obj antes.obj
 ```
 
-## Visualizacion: `test/visualize.py`
+## Experimentos
+
+Para cada funcion de base radial se ejecuto el mismo caso de prueba:
+un grid de `100 x 80` puntos con terreno Perlin (scale=30, octaves=4)
+en el rango `[0, 200]^2` y 5 abolladuras con radio en `[10, 50]` y
+profundidad en `[5, 15]`.
+
+```bash
+python3 scripts/generate_surface.py 100 80 5 \
+    --x-range 0 200 --y-range 0 200 \
+    --perlin 30 4 --i-range 5 15 --r-range 10 50 \
+    --out caso_base
+
+./build/bash_surface caso_base.obj caso_base_dents.txt gaussian            out_g.obj
+./build/bash_surface caso_base.obj caso_base_dents.txt multiquadric        out_m.obj
+./build/bash_surface caso_base.obj caso_base_dents.txt inverse_multiquadric out_i.obj
+./build/bash_surface caso_base.obj caso_base_dents.txt wendland            out_w.obj
+```
+
+## Visualizacion: `scripts/visualize.py`
 
 Genera una imagen PNG con los puntos coloreados por altura y las abolladuras como circulos.
 
 ```bash
-python3 test/visualize.py puntos.obj dents.txt
+python3 scripts/visualize.py puntos.obj dents.txt
 # Genera: vis_<timestamp>.png
 ```
 

@@ -306,40 +306,6 @@ python3 test/generate_surface.py 100 80 5 \
 ./build/bash_surface caso_base.obj caso_base_dents.txt wendland            out_w.obj
 \end{verbatim}
 
-\section{Resultados}
-
-\subsection{Gaussiana}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.45\textwidth]{example-image}
-    \caption{Resultado con función gaussiana.}
-\end{figure}
-
-\subsection{Multicuádrica}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.45\textwidth]{example-image}
-    \caption{Resultado con función multicuádrica.}
-\end{figure}
-
-\subsection{Multicuádrica inversa}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.45\textwidth]{example-image}
-    \caption{Resultado con función multicuádrica inversa.}
-\end{figure}
-
-\subsection{Wendland}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.45\textwidth]{example-image}
-    \caption{Resultado con función Wendland \(\phi_{3,1}\).}
-\end{figure}
-
 \section{Errores}
 
 \begin{enumerate}
@@ -350,5 +316,26 @@ python3 test/generate_surface.py 100 80 5 \
     superficie con variación en la altura.
 \end{enumerate}
 
+\section{Resultados}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{caso_base_triangulacion.png}
+    \caption{Malla base sin deformar.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth]{gaussiana.png}
+    \includegraphics[width=0.45\textwidth]{multicuadrática.png}
+    \caption{Resultados con función gaussiana (izquierda) y multicuádrica (derecha).}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth]{multicuadrática_inversa.png}
+    \includegraphics[width=0.45\textwidth]{wendland.png}
+    \caption{Resultados con función multicuádrica inversa (izquierda) y Wendland \(\phi_{3,1}\) (derecha).}
+\end{figure}
 
 \end{document}

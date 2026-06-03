@@ -16,7 +16,7 @@ include_directories(
 find_package(CGAL REQUIRED COMPONENTS Core)
 
 # -- Executables
-add_executable(pujCGAL_build_delaunay_from_pointcloud src/build_delaunay_from_pointcloud.cxx)
-target_link_libraries(pujCGAL_build_delaunay_from_pointcloud CGAL::CGAL)
+add_executable(bash_surface src/bash_surface.cxx src/PreprocessSurface.cxx)
+target_link_libraries(bash_surface CGAL::CGAL)
 
 ## eof - CMakeLists.txt
